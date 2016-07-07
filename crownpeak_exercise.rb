@@ -1,13 +1,12 @@
-require 'byebug'
 module CrownPeak
 
-# Write some code that will evaluate a poker self and determine its
-# rank.
+  # Write some code that will evaluate a poker self and determine its
+  # rank.
 
-# Example:
-# self: Ah As 10c 7d 6s (Pair of Aces)
-# self: Kh Kc 3s 3h 2d (2 Pair)
-# self: Kh Qh 6h 2h 9h (Flush)
+  # Example:
+  # self: Ah As 10c 7d 6s (Pair of Aces)
+  # self: Kh Kc 3s 3h 2d (2 Pair)
+  # self: Kh Qh 6h 2h 9h (Flush)
 
   def self.evaluate_hand(hand)
     hand_values = split_hand(hand)
@@ -36,10 +35,10 @@ module CrownPeak
     end
   end
 
+  #Splits apart numeral and suit values from the hand 
   def self.split_hand(hand)
     mapped_numbers = []
     mapped_suits = []
-    
     hand.each do |card|
       if card.length <= 2
         mapped_numbers << card[0]
@@ -53,11 +52,7 @@ module CrownPeak
     number_values = map_royals(mapped_numbers)
     sorted_mapped_numbers = number_values.map {|x| x.to_i}.sort
 
-    {"numbers" => sorted_mapped_numbers, "suits" => mapped_suits}
-  end
-
-  def self.repeat_values(array)
-    array.each_with_object(Hash.new(0)) { |array, counts| counts[array] += 1 }
+    return {"numbers" => sorted_mapped_numbers, "suits" => mapped_suits}
   end
 
   def self.straight_flush?(number_values, suit_values)
@@ -69,10 +64,7 @@ module CrownPeak
   end
 
   def self.full_house?(repeat_values)
-    if repeat_values.count == 2 && three_of_a_kind?(repeat_values)
-      true
-    else
-    end
+    repeat_values.count == 2 && three_of_a_kind?(repeat_values)
   end
 
   def self.flush?(suit_values)
@@ -88,13 +80,11 @@ module CrownPeak
   end
 
   def self.two_pair?(repeat_values)
-    if repeat_values.values.count(2) >= 2
-      true
-    else
-    end
+    repeat_values.values.count(2) >= 2
   end
 
   def self.one_pair?(repeat_values)
+    #Guard clause if hand has 3 of a kind
     if repeat_values.values.include?(3)
       true
     elsif repeat_values.values.count(2) == 1
@@ -109,11 +99,13 @@ module CrownPeak
       elsif repeat_values.max.first <= 10
         puts "Pair of #{repeat_values.key(2)}'s"
       end
+      #Return false if repeat_values has more than one pair
     elsif repeat_values.values.include?(2) 
       false
     end
   end
 
+  #Evaluates card numeral values to determine high card in the hand
   def self.high_card(number_values)
     if number_values.max == 14
       puts "High Card Ace"
@@ -128,10 +120,17 @@ module CrownPeak
     end
   end
 
+  #Checks card numeral values for repeats
+  def self.repeat_values(array)
+    array.each_with_object(Hash.new(0)) { |array, counts| counts[array] += 1 }
+  end 
+
+  #Provides a blueprint for comparison in the above straight? method
   def self.straight_values_from(first_value)
     (first_value...first_value + 5).to_a
   end
 
+  #Maps Royal cards(Ace, King, Queen, & Jack) to a numeral value
   def self.map_royals(array)
     array.map do |item|
       if item == 'J'

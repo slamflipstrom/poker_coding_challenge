@@ -15,7 +15,7 @@ describe CrownPeak do
   PAIR_FIVES = ['5h', '5s', '10c', '7d', '6s']
   HIGH_CARD = ['Ah', 'Ks', '10c', '7d', '6s']
   HIGH_CARD2 = ['9h', '5s', '10c', '7d', '6s']
-
+  HIGH_CARD3 = ['Kh', 'Qs', '10c', '9d', '6s']
 
   context "when hand is a straight flush" do
 
@@ -97,6 +97,10 @@ describe CrownPeak do
 
     it "should display the proper output" do
       expect { CrownPeak.evaluate_hand(HIGH_CARD2) }.to output("High Card of 10\n").to_stdout
+    end
+
+    it "should display the proper output" do
+      expect { CrownPeak.evaluate_hand(HIGH_CARD3) }.to output("High Card King\n").to_stdout
     end
 
   end
